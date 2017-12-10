@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"os"
 	"path"
@@ -33,6 +32,10 @@ func parse(line string) InterruptEntry {
 	return InterruptEntry{label: labelStr, date: parsedDate}
 }
 
+var trackListCommand = "list"
+
+var trackInterruptCommand = "int"
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Invalid number of arguments")
@@ -45,8 +48,10 @@ func main() {
 	// track --stop # Add stop track event
 
 	switch os.Args[1] {
-	case "list":
+	case trackListCommand:
 		executeListCommand()
+	case trackInterruptCommand:
+		executeInterruptCommand()
 	default:
 		executeGeneralCommand()
 	}
@@ -83,13 +88,23 @@ func readInterruptData() []InterruptEntry {
 	return entries
 }
 
-func executeGeneralCommand() {
-	isInterrupt := flag.Bool("i", false, "Create a new interrupt")
-	flag.Parse()
-
-	if *isInterrupt {
-		createInterrupt("test")
+func executeInterruptCommand() {
+	if len(os.Args) < 3 {
+		fmt.Println("oh no not enough args")
+		return
 	}
+
+	label := os.Args[2]
+	createInterrupt(label)
+}
+
+func executeGeneralCommand() {
+	// isInterrupt := flag.Bool("i", false, "Create a new interrupt")
+	// flag.Parse()
+
+	// if *isInterrupt {
+	// 	createInterrupt("test")
+	// }
 }
 
 func createInterrupt(label string) {
