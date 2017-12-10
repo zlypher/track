@@ -2,6 +2,9 @@
 
 Track is a simple command line time and interruption tracker.
 
+[![Build Status](https://travis-ci.org/zlypher/track.svg?branch=master)](https://travis-ci.org/zlypher/track)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Installation
 
 TODO
