@@ -13,11 +13,19 @@ TODO
 
 TODO
 
+### Track Interrupt
+
+Creates a new interrupt entry
+
 ```
 track int "John Doe"
 ```
 
 ...
+
+### List
+
+Lists all tracked interrupts
 
 ```
 track list

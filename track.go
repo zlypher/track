@@ -78,7 +78,7 @@ func readInterruptData() []InterruptEntry {
 	dir := ensureTrackFolder()
 	interruptFilename := ensureInterruptFile(dir)
 
-	file, err := os.Open(interruptFilename)
+	file, err := os.OpenFile(interruptFilename, os.O_CREATE|os.O_RDONLY, 0600)
 	if err != nil {
 		fmt.Println("oh no ", err)
 	}
