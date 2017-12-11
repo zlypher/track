@@ -40,7 +40,8 @@ const (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Invalid number of arguments")
+		executeUsageCommand()
+		return
 	}
 
 	// Usage:
@@ -57,8 +58,12 @@ func main() {
 	case locationCommand:
 		executeLocationCommand()
 	default:
-		executeGeneralCommand()
+		executeUsageCommand()
 	}
+}
+
+func executeUsageCommand() {
+	fmt.Println("Usage ...")
 }
 
 func executeListCommand() {
