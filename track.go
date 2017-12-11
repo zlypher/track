@@ -32,9 +32,11 @@ func parse(line string) InterruptEntry {
 	return InterruptEntry{label: labelStr, date: parsedDate}
 }
 
-var trackListCommand = "list"
-
-var trackInterruptCommand = "int"
+const (
+	listCommand      = "list"
+	interruptCommand = "int"
+	locationCommand  = "location"
+)
 
 func main() {
 	if len(os.Args) < 2 {
@@ -48,10 +50,12 @@ func main() {
 	// track --stop # Add stop track event
 
 	switch os.Args[1] {
-	case trackListCommand:
+	case listCommand:
 		executeListCommand()
-	case trackInterruptCommand:
+	case interruptCommand:
 		executeInterruptCommand()
+	case locationCommand:
+		executeLocationCommand()
 	default:
 		executeGeneralCommand()
 	}
@@ -98,6 +102,10 @@ func executeInterruptCommand() {
 	createInterrupt(label)
 }
 
+func executeLocationCommand() {
+	fmt.Println(ensureTrackFolder())
+}
+
 func executeGeneralCommand() {
 	// isInterrupt := flag.Bool("i", false, "Create a new interrupt")
 	// flag.Parse()
@@ -129,7 +137,6 @@ func ensureTrackFolder() string {
 		fmt.Println("oh no ", err)
 	}
 
-	fmt.Println("ensure track file ", trackDir)
 	return trackDir
 }
 

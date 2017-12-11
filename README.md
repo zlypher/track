@@ -23,6 +23,15 @@ track int "John Doe"
 track list
 ```
 
+### Location
+
+Returns the folder where track stores its data.
+
+```bash
+track location
+// Output: C:/Users/<USERNAME>/.track
+```
+
 ## Contributing
 
 If you find any problems or have suggestions, please open a ticket or a pull request. (see CONTRIBUTING.md)
