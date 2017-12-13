@@ -5,32 +5,11 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"strings"
 	"time"
 
 	"github.com/mitchellh/go-homedir"
+	"github.com/zlypher/track/interrupt"
 )
-
-var interruptDateFormat = "2006-01-02 15:04:05"
-
-type InterruptEntry struct {
-	date  time.Time
-	label string
-}
-
-func (entry InterruptEntry) String() string {
-	return fmt.Sprintf("%s - %s", entry.date.Format(interruptDateFormat), entry.label)
-}
-
-func parse(line string) InterruptEntry {
-	parts := strings.Split(line, " - ")
-	dateStr := parts[0]
-	labelStr := parts[1]
-
-	parsedDate, _ := time.Parse(interruptDateFormat, dateStr)
-
-	return InterruptEntry{label: labelStr, date: parsedDate}
-}
 
 const (
 	listCommand      = "list"
@@ -75,13 +54,11 @@ func executeVersionCommand() {
 
 func executeListCommand() {
 	data := readInterruptData()
-
-	for _, entry := range data {
-		fmt.Println(entry.String())
-	}
+	statistic := interrupt.DoAnalyze(data)
+	interrupt.PrintStatistic(statistic)
 }
 
-func readInterruptData() []InterruptEntry {
+func readInterruptData() []interrupt.Entry {
 	dir := ensureTrackFolder()
 	interruptFilename := ensureInterruptFile(dir)
 
@@ -92,12 +69,12 @@ func readInterruptData() []InterruptEntry {
 
 	defer file.Close()
 
-	var entries []InterruptEntry
+	var entries []interrupt.Entry
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-		entry := parse(line)
+		entry := interrupt.ParseEntry(line)
 		entries = append(entries, entry)
 	}
 
@@ -131,7 +108,7 @@ func createInterrupt(label string) {
 	dir := ensureTrackFolder()
 	trackFilename := ensureTrackFile(dir)
 	interruptFilename := ensureInterruptFile(dir)
-	entry := createInterruptEntry(label)
+	entry := interrupt.CreateEntry(label)
 
 	writeInterruptEntry(entry, trackFilename)
 	writeInterruptEntry(entry, interruptFilename)
@@ -161,11 +138,7 @@ func ensureInterruptFile(dir string) string {
 	return path.Join(dir, "_interrupts")
 }
 
-func createInterruptEntry(label string) InterruptEntry {
-	return InterruptEntry{label: label, date: time.Now()}
-}
-
-func writeInterruptEntry(entry InterruptEntry, filename string) {
+func writeInterruptEntry(entry interrupt.Entry, filename string) {
 	f, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
 		panic(err)
