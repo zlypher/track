@@ -36,6 +36,7 @@ const (
 	listCommand      = "list"
 	interruptCommand = "int"
 	locationCommand  = "location"
+	versionCommand   = "version"
 )
 
 func main() {
@@ -57,6 +58,8 @@ func main() {
 		executeInterruptCommand()
 	case locationCommand:
 		executeLocationCommand()
+	case versionCommand:
+		executeVersionCommand()
 	default:
 		executeUsageCommand()
 	}
@@ -64,6 +67,10 @@ func main() {
 
 func executeUsageCommand() {
 	fmt.Println("Usage ...")
+}
+
+func executeVersionCommand() {
+	fmt.Printf("Version: %s\n", Version)
 }
 
 func executeListCommand() {
