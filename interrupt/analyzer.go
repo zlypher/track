@@ -12,6 +12,7 @@ import (
 type Statistic struct {
 	numberOfInterrupts int
 	avgPerDay          float32
+	perPerson          map[string]int
 	firstDate          time.Time
 	entries            []Entry
 }
@@ -55,6 +56,7 @@ func DoAnalyze(entries []Entry) Statistic {
 	return Statistic{
 		numberOfInterrupts: len(entries),
 		avgPerDay:          calculateAveragePerDay(entries),
+		perPerson:          calculatePerPerson(entries),
 		firstDate:          time.Now(),
 		entries:            entries}
 }
@@ -74,6 +76,10 @@ func PrintStatistic(statistic Statistic) {
 		fmt.Println(entry.String())
 	}
 	fmt.Println("-----------------------------------")
+	for person, count := range statistic.perPerson {
+		fmt.Printf("%s: %d\n", person, count)
+	}
+	fmt.Println("-----------------------------------")
 }
 
 func calculateAveragePerDay(entries []Entry) float32 {
@@ -90,4 +96,19 @@ func calculateAveragePerDay(entries []Entry) float32 {
 	last := entries[numEntries-1]
 	numDays := float32(math.Abs(first.date.Sub(last.date).Hours() / 24))
 	return float32(numEntries) / numDays
+}
+
+func calculatePerPerson(entries []Entry) map[string]int {
+	m := make(map[string]int)
+
+	for _, entry := range entries {
+		_, ok := m[entry.label]
+		if !ok {
+			m[entry.label] = 1
+		} else {
+			m[entry.label] = m[entry.label] + 1
+		}
+	}
+
+	return m
 }
