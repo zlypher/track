@@ -1,4 +1,4 @@
 package main
 
-// Current version of track
+// Version denotes the current version of track
 const Version string = "0.0.2"

@@ -1,14 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
-	"path"
-	"time"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/zlypher/track/interrupt"
+	"github.com/zlypher/track/store"
 )
 
 const (
@@ -19,6 +16,12 @@ const (
 )
 
 func main() {
+	// data := track.TrackData{}
+	// i1 := track.Interrupt{Date: time.Now(), Label: "test"}
+
+	// data.Interrupts = append(data.Interrupts, i1)
+	// store.SaveData(data)
+
 	if len(os.Args) < 2 {
 		executeUsageCommand()
 		return
@@ -53,32 +56,9 @@ func executeVersionCommand() {
 }
 
 func executeListCommand() {
-	data := readInterruptData()
+	data := store.LoadInterrupts()
 	statistic := interrupt.DoAnalyze(data)
 	interrupt.PrintStatistic(statistic)
-}
-
-func readInterruptData() []interrupt.Entry {
-	dir := ensureTrackFolder()
-	interruptFilename := ensureInterruptFile(dir)
-
-	file, err := os.OpenFile(interruptFilename, os.O_CREATE|os.O_RDONLY, 0600)
-	if err != nil {
-		fmt.Println("oh no ", err)
-	}
-
-	defer file.Close()
-
-	var entries []interrupt.Entry
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		entry := interrupt.ParseEntry(line)
-		entries = append(entries, entry)
-	}
-
-	return entries
 }
 
 func executeInterruptCommand() {
@@ -88,11 +68,12 @@ func executeInterruptCommand() {
 	}
 
 	label := os.Args[2]
-	createInterrupt(label)
+	entry := interrupt.CreateEntry(label)
+	store.SaveInterrupt(entry)
 }
 
 func executeLocationCommand() {
-	fmt.Println(ensureTrackFolder())
+	fmt.Println(store.Location())
 }
 
 func executeGeneralCommand() {
@@ -104,49 +85,7 @@ func executeGeneralCommand() {
 	// }
 }
 
-func createInterrupt(label string) {
-	dir := ensureTrackFolder()
-	trackFilename := ensureTrackFile(dir)
-	interruptFilename := ensureInterruptFile(dir)
-	entry := interrupt.CreateEntry(label)
-
-	writeInterruptEntry(entry, trackFilename)
-	writeInterruptEntry(entry, interruptFilename)
-}
-
-func ensureTrackFolder() string {
-	dir, err := homedir.Dir()
-	if err != nil {
-		fmt.Println("oh no ", err)
-	}
-
-	trackDir := path.Join(dir, ".track")
-	err = os.MkdirAll(trackDir, os.ModePerm)
-	if err != nil {
-		fmt.Println("oh no ", err)
-	}
-
-	return trackDir
-}
-
-func ensureTrackFile(dir string) string {
-	filename := time.Now().Format("2006-01-02")
-	return path.Join(dir, filename)
-}
-
-func ensureInterruptFile(dir string) string {
-	return path.Join(dir, "_interrupts")
-}
-
-func writeInterruptEntry(entry interrupt.Entry, filename string) {
-	f, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
-	if err != nil {
-		panic(err)
-	}
-
-	defer f.Close()
-
-	if _, err = fmt.Fprintf(f, "%s\n", entry.String()); err != nil {
-		panic(err)
-	}
-}
+// func ensureTrackFile(dir string) string {
+// 	filename := time.Now().Format("2006-01-02")
+// 	return path.Join(dir, filename)
+// }
