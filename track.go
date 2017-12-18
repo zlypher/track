@@ -13,15 +13,11 @@ const (
 	interruptCommand = "int"
 	locationCommand  = "location"
 	versionCommand   = "version"
+	startCommand     = "start"
+	stopCommand      = "stop"
 )
 
 func main() {
-	// data := track.TrackData{}
-	// i1 := track.Interrupt{Date: time.Now(), Label: "test"}
-
-	// data.Interrupts = append(data.Interrupts, i1)
-	// store.SaveData(data)
-
 	if len(os.Args) < 2 {
 		executeUsageCommand()
 		return
@@ -38,6 +34,10 @@ func main() {
 		executeListCommand()
 	case interruptCommand:
 		executeInterruptCommand()
+	case startCommand:
+		executeTrackCommand()
+	case stopCommand:
+		executeStopCommand()
 	case locationCommand:
 		executeLocationCommand()
 	case versionCommand:
@@ -76,16 +76,18 @@ func executeLocationCommand() {
 	fmt.Println(store.Location())
 }
 
-func executeGeneralCommand() {
-	// isInterrupt := flag.Bool("i", false, "Create a new interrupt")
-	// flag.Parse()
+func executeTrackCommand() {
+	if len(os.Args) < 3 {
+		fmt.Println("oh no not enough args")
+		return
+	}
 
-	// if *isInterrupt {
-	// 	createInterrupt("test")
-	// }
+	label := os.Args[2]
+	entry := interrupt.CreateEntry(label)
+	store.SaveTrack(entry)
 }
 
-// func ensureTrackFile(dir string) string {
-// 	filename := time.Now().Format("2006-01-02")
-// 	return path.Join(dir, filename)
-// }
+func executeStopCommand() {
+	entry := interrupt.CreateEntry("stop")
+	store.SaveStop(entry)
+}

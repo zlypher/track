@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"time"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/zlypher/track/interrupt"
@@ -24,8 +25,22 @@ const (
 // SaveInterrupt saves a single interrupt entry
 func SaveInterrupt(entry interrupt.Entry) {
 	dir := ensureTrackFolder()
-	interruptFilename := ensureInterruptFile(dir)
-	writeInterruptEntry(entry, interruptFilename)
+	file := ensureInterruptFile(dir)
+	writeInterruptEntry(entry, file)
+}
+
+// SaveTrack saves a single track entry
+func SaveTrack(entry interrupt.Entry) {
+	dir := ensureTrackFolder()
+	file := ensureTrackFile(dir)
+	writeTrackEntry(entry, file)
+}
+
+// SaveStop saves a single stop entry
+func SaveStop(entry interrupt.Entry) {
+	dir := ensureTrackFolder()
+	file := ensureTrackFile(dir)
+	writeStopEntry(entry, file)
 }
 
 // LoadInterrupts loads the file and returns the loaded data
@@ -76,15 +91,32 @@ func ensureInterruptFile(dir string) string {
 	return path.Join(dir, trackInterruptFile)
 }
 
-func writeInterruptEntry(entry interrupt.Entry, filename string) {
-	f, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
+func ensureTrackFile(dir string) string {
+	filename := time.Now().Format("2006-01-02")
+	return path.Join(dir, filename)
+}
+
+func writeToFile(file string, content string) {
+	f, err := os.OpenFile(file, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
 		panic(err)
 	}
 
 	defer f.Close()
 
-	if _, err = fmt.Fprintf(f, "%s\n", entry.String()); err != nil {
+	if _, err = fmt.Fprintf(f, "%s\n", content); err != nil {
 		panic(err)
 	}
+}
+
+func writeInterruptEntry(entry interrupt.Entry, filename string) {
+	writeToFile(filename, entry.String())
+}
+
+func writeTrackEntry(entry interrupt.Entry, filename string) {
+	writeToFile(filename, entry.String())
+}
+
+func writeStopEntry(entry interrupt.Entry, filename string) {
+	writeToFile(filename, entry.String())
 }

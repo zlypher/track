@@ -7,11 +7,32 @@ Track is a simple command line time and interruption tracker.
 
 ## Installation
 
-TODO
+1. Install via `go`
+
+```bash
+go get github.com/zlypher/track
+go install github.com/zlypher/track
+```
+
+2. Download packaged version from [release page](https://github.com/zlypher/track/releases)
 
 ## Usage
 
-TODO
+### Track Task
+
+Starts tracking of a new task
+
+```
+track start "Refactor Application"
+```
+
+### Stop Tracking
+
+Stops the tracking
+
+```
+track stop
+```
 
 ### Track Interrupt
 
