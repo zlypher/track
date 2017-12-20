@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/zlypher/track/interrupt"
 	"github.com/zlypher/track/store"
@@ -68,7 +69,7 @@ func executeInterruptCommand() {
 	}
 
 	label := os.Args[2]
-	entry := interrupt.CreateEntry(label)
+	entry := interrupt.Entry{Label: label, Date: time.Now()}
 	store.SaveInterrupt(entry)
 }
 
@@ -83,11 +84,11 @@ func executeTrackCommand() {
 	}
 
 	label := os.Args[2]
-	entry := interrupt.CreateEntry(label)
+	entry := interrupt.Entry{Label: label, Date: time.Now()}
 	store.SaveTrack(entry)
 }
 
 func executeStopCommand() {
-	entry := interrupt.CreateEntry("stop")
+	entry := interrupt.Entry{Label: "stop", Date: time.Now()}
 	store.SaveStop(entry)
 }

@@ -20,7 +20,7 @@ type Statistic struct {
 // an interruption statistic.
 func DoAnalyze(entries []Entry) Statistic {
 	sort.Slice(entries, func(i, j int) bool {
-		return entries[i].date.Before(entries[j].date)
+		return entries[i].Date.Before(entries[j].Date)
 	})
 
 	return Statistic{
@@ -64,7 +64,7 @@ func calculateAveragePerDay(entries []Entry) float32 {
 
 	first := entries[0]
 	last := entries[numEntries-1]
-	numDays := float32(math.Abs(first.date.Sub(last.date).Hours() / 24))
+	numDays := float32(math.Abs(first.Date.Sub(last.Date).Hours()/24)) + 1
 	return float32(numEntries) / numDays
 }
 
@@ -72,11 +72,11 @@ func calculatePerPerson(entries []Entry) map[string]int {
 	m := make(map[string]int)
 
 	for _, entry := range entries {
-		_, ok := m[entry.label]
+		_, ok := m[entry.Label]
 		if !ok {
-			m[entry.label] = 1
+			m[entry.Label] = 1
 		} else {
-			m[entry.label] = m[entry.label] + 1
+			m[entry.Label] = m[entry.Label] + 1
 		}
 	}
 
