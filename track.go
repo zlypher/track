@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	version          = "x.x.x"
 	listCommand      = "list"
 	interruptCommand = "int"
 	locationCommand  = "location"
@@ -53,7 +54,7 @@ func executeUsageCommand() {
 }
 
 func executeVersionCommand() {
-	fmt.Printf("Version: %s\n", Version)
+	fmt.Printf("%s\n", version)
 }
 
 func executeListCommand() {
