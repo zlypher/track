@@ -9,8 +9,9 @@ import (
 	"github.com/zlypher/track/store"
 )
 
+var version = "x.x.x"
+
 const (
-	version          = "x.x.x"
 	listCommand      = "list"
 	interruptCommand = "int"
 	locationCommand  = "location"
