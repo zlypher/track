@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/zlypher/track/interrupt"
@@ -78,7 +79,7 @@ func createAndGetTrackFolder() string {
 		fmt.Println("oh no ", err)
 	}
 
-	return trackDir
+	return filepath.Clean(trackDir)
 }
 
 func writeToFile(file string, content string) {
