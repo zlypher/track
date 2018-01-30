@@ -15,9 +15,9 @@ Track is a simple command line time and interruption tracker.
 
 1. Install via `go`
 
-```bash
-go get github.com/zlypher/track
-go install github.com/zlypher/track
+```sh
+> go get github.com/zlypher/track
+> go install github.com/zlypher/track
 ```
 
 2. Download packaged version from [release page](https://github.com/zlypher/track/releases)
@@ -36,24 +36,24 @@ go install github.com/zlypher/track
 
 Starts tracking of a new task
 
-```
-track start "Refactor Application"
+```sh
+> track start "Refactor Application"
 ```
 
 ### Stop Tracking
 
 Stops the tracking
 
-```
-track stop
+```sh
+> track stop
 ```
 
 ### Track Interrupt
 
 Creates a new interrupt entry
 
-```
-track int "John Doe"
+```sh
+> track int "John Doe"
 ```
 
 ...
@@ -62,26 +62,26 @@ track int "John Doe"
 
 Lists all tracked interrupts
 
-```
-track list
+```sh
+> track list
 ```
 
 ### Location
 
 Returns the folder where track stores its data.
 
-```bash
-track location
-// Output: C:/Users/<USERNAME>/.track
+```sh
+> track location
+# Output: C:/Users/<USERNAME>/.track
 ```
 
 ### Version
 
 Outputs the current app version.
 
-```bash
-track version
-// Output: 0.0.6
+```sh
+> track version
+# Output: 0.0.6
 ```
 
 ## Contributing
