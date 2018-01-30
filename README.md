@@ -86,8 +86,8 @@ track version
 
 ## Contributing
 
-If you find any problems or have suggestions, please open a ticket or a pull request. (see CONTRIBUTING.md)
+If you find any problems or have suggestions, please open a ticket or a pull request. (see [CONTRIBUTING.md](CONTRIBUTING.md))
 
 ## LICENSE
 
-MIT (see LICENSE.md)
+MIT (see [LICENSE.md](LICENSE.md))
